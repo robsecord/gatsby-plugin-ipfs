@@ -107,8 +107,8 @@ const cleanupWebManifest = async () => {
     }
 
     contents = contents
-    .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, './')
-    .replace(/__GATSBY_IPFS_PATH_PREFIX__/g, '');
+    .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "./")
+    .replace(/__GATSBY_IPFS_PATH_PREFIX__/g, "");
 
     await writeFileAsync(path, contents);
 };
