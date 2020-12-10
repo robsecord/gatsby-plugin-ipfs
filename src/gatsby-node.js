@@ -75,9 +75,8 @@ const relativizeMiscAssetFiles = async () => {
 
     await pMap(paths, async (path) => {
         // Skip if this is not a text file
-        if (!isTextPath(path)) {
-            return;
-        }
+        const _isTextPath = isTextPath(path);
+        if (!_isTextPath) { return; }
 
         const buffer = await readFileAsync(path);
         let contents = buffer.toString();
@@ -115,6 +114,25 @@ const injectScriptInHtmlFiles = async () => {
     }, { concurrency: TRANSFORM_CONCURRENCY });
 };
 
+const cleanupWebManifest = async () => {
+  // replace prefix paths for manifest file
+  const path = 'public/manifest.webmanifest';
+  const buffer = await readFileAsync(path);
+  let contents = buffer.toString();
+
+  if (!contents.includes('__GATSBY_IPFS_PATH_PREFIX__')) {
+      return;
+  }
+
+  contents = contents
+    .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "/")
+    .replace(/__GATSBY_IPFS_PATH_PREFIX__/g, "");
+    // .replace("\"/__GATSBY_IPFS_PATH_PREFIX__\"", "\"/\"")
+    // .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "/");
+
+  await writeFileAsync(path, contents);
+}
+
 exports.onPreBootstrap = ({ store, reporter }) => {
     const { config, program } = store.getState();
 
@@ -132,6 +150,7 @@ exports.onPostBuild = async () => {
     await relativizeHtmlFiles();
     await relativizeJsFiles();
     await relativizeMiscAssetFiles();
+    await cleanupWebManifest();
 
     // Inject the runtime script into the <head> of all HTML files
     await injectScriptInHtmlFiles();
