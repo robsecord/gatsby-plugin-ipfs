@@ -95,6 +95,26 @@ const relativizeMiscAssetFiles = async () => {
     }, { concurrency: TRANSFORM_CONCURRENCY });
 };
 
+const cleanupWebManifest = async () => {
+    // replace prefix paths for manifest file
+    const path = 'public/manifest.webmanifest';
+    const buffer = await readFileAsync(path);
+    let contents = buffer.toString();
+
+    if (!contents.includes('__GATSBY_IPFS_PATH_PREFIX__')) {
+        return;
+    }
+
+    contents = contents
+    .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "./")
+    .replace(/__GATSBY_IPFS_PATH_PREFIX__/g, "");
+    // .replace("\"/__GATSBY_IPFS_PATH_PREFIX__\"", "\"/\"")
+    // .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "/");
+
+    await writeFileAsync(path, contents);
+}
+
+
 const injectScriptInHtmlFiles = async () => {
     // Injects a script into the <head> of all HTML files that defines the
     // __GATSBY_IPFS_PATH_PREFIX__ variable
