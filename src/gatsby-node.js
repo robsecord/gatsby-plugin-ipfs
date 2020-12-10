@@ -101,15 +101,15 @@ const cleanupWebManifest = async () => {
     const buffer = await readFileAsync(path);
     let contents = buffer.toString();
 
-    if (!contents.includes('__GATSBY_IPFS_PATH_PREFIX__')) {
-        return;
-    }
+    // if (!contents.includes('__GATSBY_IPFS_PATH_PREFIX__')) {
+    //     return;
+    // }
 
     contents = contents
-    .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "./")
-    .replace(/__GATSBY_IPFS_PATH_PREFIX__/g, "");
-    // .replace("\"/__GATSBY_IPFS_PATH_PREFIX__\"", "\"/\"")
-    // .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "/");
+      .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "./")
+      .replace(/__GATSBY_IPFS_PATH_PREFIX__/g, "");
+      // .replace("\"/__GATSBY_IPFS_PATH_PREFIX__\"", "\"/\"")
+      // .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "/");
 
     await writeFileAsync(path, contents);
 }
@@ -140,13 +140,13 @@ const cleanupWebManifest = async () => {
   const buffer = await readFileAsync(path);
   let contents = buffer.toString();
 
-  if (!contents.includes('__GATSBY_IPFS_PATH_PREFIX__')) {
-      return;
-  }
+  // if (!contents.includes('__GATSBY_IPFS_PATH_PREFIX__')) {
+  //     return;
+  // }
 
   contents = contents
-    .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "/")
-    .replace(/__GATSBY_IPFS_PATH_PREFIX__/g, "");
+    // .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "/")
+    .replace(/__GATSBY_IPFS_PATH_PREFIX__/g, "http://localhost:8000");
     // .replace("\"/__GATSBY_IPFS_PATH_PREFIX__\"", "\"/\"")
     // .replace(/\/__GATSBY_IPFS_PATH_PREFIX__\//g, "/");
 
